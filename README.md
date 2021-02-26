@@ -1,2 +1,1 @@
-# HappyIndex
-TÜBİTAK Proje - Happy Index
+# happy-index

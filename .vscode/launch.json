@@ -1,0 +1,56 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Start Electron App",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "windows": {
+        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+      },
+      "args": ["."],
+      "outputCapture": "std"
+    },
+    {
+      "name": "Python: Current File",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Train Mask Model",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/python/train_mask_model.py",
+      "cwd": "${workspaceFolder}/python",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Test Mask Model",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/python/test_mask_model.py",
+      "cwd": "${workspaceFolder}/python",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Hello Python",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/test/hello_world.py",
+      "cwd": "${workspaceFolder}/test",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Hello NodeJS",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/test/hello_world.js",
+      "cwd": "${workspaceFolder}/test",
+      "console": "integratedTerminal"
+    }
+  ]
+}

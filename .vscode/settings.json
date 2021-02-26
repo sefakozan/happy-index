@@ -1,0 +1,8 @@
+{
+  "python.pythonPath": "C:\\Users\\Kozan\\AppData\\Local\\Programs\\Python\\Python37\\python.exe",
+  "python.languageServer": "Pylance",
+  "python.formatting.provider": "autopep8",
+  "pyformat.autopep8Args": ["--line-length 800"],
+  "git.ignoreLimitWarning": true,
+  "editor.formatOnSave": true
+}

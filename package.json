@@ -1,0 +1,34 @@
+{
+  "name": "happy-index",
+  "version": "1.0.0",
+  "description": "Yapay Zeka Algoritmalarıyla Mutluluk İndeksi Hesaplama (Happy Index)",
+  "main": "app.js",
+  "author": "Muhammet Sefa Kozan <me@sefakozan.com>",
+  "homepage": "http://www.sefakozan.com",
+  "email": "me@sefakozan.com",
+  "license": "MIT",
+  "repository": "https://github.com/sefakozan/HappyIndex.git",
+  "scripts": {
+    "start": "electron .",
+    "serve": "npx http-server -o --cors",
+    "build": "electron-builder build --win portable"
+  },
+  "build": {
+    "appId": "com.sefakozan.happyindex",
+    "productName": "Happy Index",
+    "copyright": "Copyright © 2021 ${author}",
+    "files": [
+      "!node_modules",
+      "!python"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "assets/icon.png",
+      "publisherName": "${author}"
+    }
+  },
+  "devDependencies": {
+    "electron": "^9.4.2",
+    "electron-builder": "^22.9.1"
+  }
+}
