@@ -15,7 +15,7 @@ CWD = path.dirname(path.realpath(__file__))
 
 TRAIN_DIR = path.join(CWD,'dataset','train')
 VALID_DIR = path.join(CWD,'dataset','validation')
-TEST_DIR = path.join(CWD,'dataset','test_large')
+TEST_DIR = path.join(CWD,'dataset','test')
 
 AI_MASK_MODEL_DIR = path.join(CWD,'ai_mask_model')
 AI_MASK_MODEL_PATH = path.join(CWD,'ai_mask_model','mask_model.h5')
