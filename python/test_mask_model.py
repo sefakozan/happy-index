@@ -1,4 +1,9 @@
 # import the necessary packages
+import shutil
+from threading import Timer
+import sys
+import os.path as path
+import math
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
@@ -10,15 +15,9 @@ import imutils
 import time
 import cv2
 import os
-import math
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 # system libraries
-import os
-import os.path as path
-import sys
-from threading import Timer
-import shutil
-import time
 
 
 # SETTINGS
@@ -138,7 +137,8 @@ while True:
             label = "Incorrect"
             color = (0, 0, 255)
 
-        label = "{}: {:.1f}%".format(label, max(correct, incorrect, normal) * 100)
+        label = "{}: {:.1f}%".format(
+            label, max(correct, incorrect, normal) * 100)
 
         # display the label and bounding box rectangle on the output
         # frame
