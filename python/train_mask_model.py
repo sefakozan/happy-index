@@ -109,7 +109,7 @@ MaskeModel.add(layers.BatchNormalization(axis=-1,momentum=0.8))
 MaskeModel.add(layers.Flatten( name="flatten_layer"))
 MaskeModel.add(layers.Dropout(0.4))
 
-# 128 birimden oluşan klasik katman, relu aktivasyon fonksiyonu kullanıldı.
+# 160 birimden oluşan klasik katman, relu aktivasyon fonksiyonu kullanıldı.
 MaskeModel.add(layers.Dense(160,use_bias=False, name="dense_layer"))
 MaskeModel.add(layers.BatchNormalization(axis=-1,momentum=0.8))
 MaskeModel.add(layers.ReLU())
