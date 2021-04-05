@@ -10,9 +10,20 @@
       "windows": {
         "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
       },
-      "args": ["."],
+      "args": [
+        "."
+      ],
       "outputCapture": "std"
     },
+    {
+      "name": "Test Mask Model",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/python/test_mask_model.py",
+      "cwd": "${workspaceFolder}/python",
+      "console": "integratedTerminal"
+    },
+    /*
     {
       "name": "Python: Current File",
       "type": "python",
@@ -28,14 +39,7 @@
       "cwd": "${workspaceFolder}/python",
       "console": "integratedTerminal"
     },
-    {
-      "name": "Test Mask Model",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/python/test_mask_model.py",
-      "cwd": "${workspaceFolder}/python",
-      "console": "integratedTerminal"
-    },
+
     {
       "name": "Hello Python",
       "type": "python",
@@ -51,6 +55,6 @@
       "program": "${workspaceFolder}/test/hello_world.js",
       "cwd": "${workspaceFolder}/test",
       "console": "integratedTerminal"
-    }
+    }*/
   ]
 }
