@@ -43,9 +43,9 @@ const fps_el = document.getElementById('fps');
 
 
 // ayarlar
-const VIDEO_WIDTH = 844;            
+const VIDEO_WIDTH = 844;
 const VIDEO_HEIGHT = 475;
-const FPS = 10;
+const FPS = 5;
 const HAREKETLI_ORT = 3;
 const DRAW_BOX_OPTIONS = { lineWidth: 2, boxColor: "#FF8C00" };
 const DEDECTOR_OPTIONS = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.4, maxResults: 1 });
@@ -53,14 +53,14 @@ const FACE_CANVAS_SIZE = 128;
 
 // faceapi ayarları
 faceapi.env.monkeyPatch
-({
-    Canvas: HTMLCanvasElement,
-    Image: HTMLImageElement,
-    ImageData: ImageData,
-    Video: HTMLVideoElement,
-    createCanvasElement: () => document.createElement('canvas'),
-    createImageElement: () => document.createElement('img')
-});
+    ({
+        Canvas: HTMLCanvasElement,
+        Image: HTMLImageElement,
+        ImageData: ImageData,
+        Video: HTMLVideoElement,
+        createCanvasElement: () => document.createElement('canvas'),
+        createImageElement: () => document.createElement('img')
+    });
 
 // yüz maskesi modelini yükle
 
@@ -70,7 +70,7 @@ async function LoadMaskModel() {
     MaskeModel = await tf.loadLayersModel('ai_mask_model/model.json');
 }
 
-function maskeTahminiYap(canvas_el) { 
+function maskeTahminiYap(canvas_el) {
     tf.engine().startScope();
     let inputTensor = tf.browser.fromPixels(canvas_el).toFloat();
     const offset = tf.scalar(127.5);
@@ -83,44 +83,39 @@ function maskeTahminiYap(canvas_el) {
 }
 
 Promise.all
-(
-    [
-        faceapi.nets.ssdMobilenetv1.loadFromUri('ai_tensorflow_models'),
-        faceapi.nets.faceExpressionNet.loadFromUri('ai_tensorflow_models'),
-        faceapi.nets.ageGenderNet.loadFromUri('ai_tensorflow_models'),
-        LoadMaskModel()
-    ]
-).then(startVideo);
+    (
+        [
+            faceapi.nets.ssdMobilenetv1.loadFromUri('ai_tensorflow_models'),
+            faceapi.nets.faceExpressionNet.loadFromUri('ai_tensorflow_models'),
+            faceapi.nets.ageGenderNet.loadFromUri('ai_tensorflow_models'),
+            LoadMaskModel()
+        ]
+    ).then(startVideo);
 
 // web kamerasını aç
-function startVideo()
-{
-    if(navigator.mediaDevices.getUserMedia)
-    {
+function startVideo() {
+    if (navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia
-        ({ 
-            video:
-            {
-                width: { ideal: VIDEO_WIDTH },
-                height: { ideal: VIDEO_HEIGHT },
-                facingMode: "user"
-            }
-        })
-        .then(function(stream)
-        {
-            video_el.srcObject = stream;
-        })
-        .catch(function(error)
-        {
-            console.log("Kamera açılırken hata oluştu !!!");
-        });
+            ({
+                video:
+                {
+                    width: { ideal: VIDEO_WIDTH },
+                    height: { ideal: VIDEO_HEIGHT },
+                    facingMode: "user"
+                }
+            })
+            .then(function (stream) {
+                video_el.srcObject = stream;
+            })
+            .catch(function (error) {
+                console.log("Kamera açılırken hata oluştu !!!");
+            });
     }
 }
 
 
-var VideoCanvas,DisplaySize,VideoCanvasContext,FaceCanvasContext;
-video_el.addEventListener('playing',() =>
-{
+var VideoCanvas, DisplaySize, VideoCanvasContext, FaceCanvasContext;
+video_el.addEventListener('playing', () => {
     face_canvas_el.width = FACE_CANVAS_SIZE;
     face_canvas_el.height = FACE_CANVAS_SIZE;
 
@@ -137,7 +132,7 @@ video_el.addEventListener('playing',() =>
 
     start();
 
-    setTimeout(() => { 
+    setTimeout(() => {
         loader_el.classList.remove("is-active");
     }, 10000)
 });
@@ -145,33 +140,33 @@ video_el.addEventListener('playing',() =>
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-async function start() { 
+async function start() {
     const loop_start = (new Date()).getTime();
 
     try {
         await detect();
     }
-    catch (err) { 
+    catch (err) {
         console.log(err);
     }
-    
+
     let loop_end = (new Date()).getTime();
     const diff_milliseconds = loop_end - loop_start
     const fps_milliseconds = 1000 / FPS;
     const diff = fps_milliseconds - diff_milliseconds;
-    
-    if (diff > 0) { 
+
+    if (diff > 0) {
         await sleep(diff);
     }
 
     loop_end = new Date().getTime();
     let fps_diff = loop_end - loop_start;
-    if (fps_diff > 0) { 
+    if (fps_diff > 0) {
         const real_fps = 1000 / fps_diff;
         fps_el.innerText = real_fps.toFixed(2);
     }
 
-    
+
     start();
 }
 
@@ -190,7 +185,7 @@ async function detect() {
 
     const maskeTahmini = maskeTahminiYap(face_canvas_el);
     let dogruMaskeTakmaOrani = dogruMaskeTakmaOraniHesapla(maskeTahmini);
-    
+
     //yüzü bulmak icin cizilen kareyi sil
     VideoCanvasContext.clearRect(0, 0, VideoCanvas.width, VideoCanvas.height);
     VideoCanvasContext.beginPath();
@@ -219,36 +214,36 @@ async function detect() {
     mutlulukOrani = mutluluk_hort(mutlulukOrani);
     GenelMutlulukToplami += mutlulukOrani;
 
-    if(cinsiyet == "Kadın"){
+    if (cinsiyet == "Kadın") {
         KadinSayisi++;
         KadinlarinMutlulukToplami += mutlulukOrani;
     }
-    else{
+    else {
         ErkekSayisi++;
         ErkeklerinMutlulukToplami += mutlulukOrani;
     }
 
     switch (true) {
-        case (yas<=24):
+        case (yas <= 24):
             YasGrubu1ToplamMutluluk += mutlulukOrani;
             YasGrubu1ToplamSayi++;
-        break;
-        case (yas<=34):
+            break;
+        case (yas <= 34):
             YasGrubu2ToplamMutluluk += mutlulukOrani;
             YasGrubu2ToplamSayi++;
-        break;
-        case (yas<=44):
+            break;
+        case (yas <= 44):
             YasGrubu3ToplamMutluluk += mutlulukOrani;
             YasGrubu3ToplamSayi++;
             break;
-        case (yas<=54):
+        case (yas <= 54):
             YasGrubu4ToplamMutluluk += mutlulukOrani;
             YasGrubu4ToplamSayi++;
-        break;
+            break;
         default:
             YasGrubu5ToplamMutluluk += mutlulukOrani;
             YasGrubu5ToplamSayi++;
-        break;
+            break;
     }
 
     updateHappyGUI(cinsiyet, yas, mutlulukOrani);
@@ -259,11 +254,11 @@ function dogruMaskeTakmaOraniHesapla(data) {
     let sonuc = 50;
 
     // doğru maske takılı olama ihtimali
-    const maske_dogru = data[0]*100;
+    const maske_dogru = data[0] * 100;
     // yanlış maske takılı olama ihtimali
     const maske_yanlis = data[1] * 100;
     // maske takılı olamama ihtimali
-    const maske_yok = data[2]*100;
+    const maske_yok = data[2] * 100;
 
 
     if (maske_yok > maske_dogru && maske_yok > maske_yanlis) {
@@ -272,11 +267,10 @@ function dogruMaskeTakmaOraniHesapla(data) {
     }
     else {
         if (maske_dogru > maske_yanlis) {
-            sonuc += maske_dogru/2;
+            sonuc += maske_dogru / 2;
         }
-        else
-        {
-            sonuc -= maske_yanlis/2;
+        else {
+            sonuc -= maske_yanlis / 2;
         }
 
         // 0 hiç maske olmadığı anlamına geliyor
@@ -291,47 +285,47 @@ function mutlulukOraniHesapla(data) {
     const dogal = data.neutral * 100;
     const mutlu = data.happy * 100;
 
-    if (dogal>uzgun && dogal>mutlu) {
+    if (dogal > uzgun && dogal > mutlu) {
         sonuc = 40;
-        sonuc = sonuc + dogal/10;
+        sonuc = sonuc + dogal / 10;
 
-        if(mutlu>uzgun){
-            sonuc += mutlu/2;
+        if (mutlu > uzgun) {
+            sonuc += mutlu / 2;
         }
-        else if(uzgun>mutlu){
-            sonuc -= uzgun/2;
+        else if (uzgun > mutlu) {
+            sonuc -= uzgun / 2;
         }
     }
     else {
-        if(mutlu>uzgun){
-            sonuc += mutlu/2;
+        if (mutlu > uzgun) {
+            sonuc += mutlu / 2;
         }
-        else if(uzgun>mutlu){
-            sonuc -= uzgun/2;
+        else if (uzgun > mutlu) {
+            sonuc -= uzgun / 2;
         }
     }
 
     return sonuc;
 }
 
-function updateMaskGUI(dogruMaskeKullanimi) { 
+function updateMaskGUI(dogruMaskeKullanimi) {
     oran_bari_el.style.backgroundColor = '#4094b9';
-    
+
     yuz_sayisi_el.innerText = Math.round(ToplamMaskesizYuzSayisi + ToplamMaskeliYuzSayisi);
     analiz_yazisi_el.innerHTML = `Doğru Maske Kullanım Oranı: %${dogruMaskeKullanimi}`;
 
     let maskeTakmaOrani = ToplamMaskeliYuzSayisi / (ToplamMaskesizYuzSayisi + ToplamMaskeliYuzSayisi);
-    maskeTakmaOrani = Math.round(maskeTakmaOrani*100);
+    maskeTakmaOrani = Math.round(maskeTakmaOrani * 100);
     let dogruMaskeTakmaOrani = DogruMaskeKullanimToplami / ToplamMaskeliYuzSayisi;
     dogruMaskeTakmaOrani = Math.round(dogruMaskeTakmaOrani);
-    
+
     maske_oran_el.innerText = `${maskeTakmaOrani}`;
     doru_maske_oran_el.innerText = `${dogruMaskeTakmaOrani}`;
     oran_bari_el.innerText = `%${dogruMaskeKullanimi}`;
     oran_bari_el.style.height = `${dogruMaskeKullanimi}%`;
 }
 
-function updateHappyGUI(cinsiyet, yas, mutluluk) { 
+function updateHappyGUI(cinsiyet, yas, mutluluk) {
     oran_bari_el.style.backgroundColor = '#00947e';
 
     yuz_sayisi_el.innerText = Math.round(ToplamMaskesizYuzSayisi + ToplamMaskeliYuzSayisi);
@@ -346,32 +340,31 @@ function updateHappyGUI(cinsiyet, yas, mutluluk) {
     oran_bari_el.innerText = `%${mutluluk}`;
     oran_bari_el.style.height = `${mutluluk}%`;
 
-    ortalama_mutluluk_orani_el.innerText = Math.round(GenelMutlulukToplami/ToplamMaskesizYuzSayisi);
-    kadinlarin_mutluluk_orani_el.innerText = Math.round(KadinlarinMutlulukToplami/KadinSayisi);
-    erkeklerin_mutluluk_orani_el.innerText = Math.round(ErkeklerinMutlulukToplami/ErkekSayisi);
-    
+    ortalama_mutluluk_orani_el.innerText = Math.round(GenelMutlulukToplami / ToplamMaskesizYuzSayisi);
+    kadinlarin_mutluluk_orani_el.innerText = Math.round(KadinlarinMutlulukToplami / KadinSayisi);
+    erkeklerin_mutluluk_orani_el.innerText = Math.round(ErkeklerinMutlulukToplami / ErkekSayisi);
 
-    yas1_el.innerText = Math.round(YasGrubu1ToplamMutluluk/YasGrubu1ToplamSayi);
-    yas2_el.innerText = Math.round(YasGrubu2ToplamMutluluk/YasGrubu2ToplamSayi);
-    yas3_el.innerText = Math.round(YasGrubu3ToplamMutluluk/YasGrubu3ToplamSayi);
-    yas4_el.innerText = Math.round(YasGrubu4ToplamMutluluk/YasGrubu4ToplamSayi);
-    yas5_el.innerText = Math.round(YasGrubu5ToplamMutluluk/YasGrubu5ToplamSayi);
+
+    yas1_el.innerText = Math.round(YasGrubu1ToplamMutluluk / YasGrubu1ToplamSayi);
+    yas2_el.innerText = Math.round(YasGrubu2ToplamMutluluk / YasGrubu2ToplamSayi);
+    yas3_el.innerText = Math.round(YasGrubu3ToplamMutluluk / YasGrubu3ToplamSayi);
+    yas4_el.innerText = Math.round(YasGrubu4ToplamMutluluk / YasGrubu4ToplamSayi);
+    yas5_el.innerText = Math.round(YasGrubu5ToplamMutluluk / YasGrubu5ToplamSayi);
 }
 
-async function yuzResminiAl(video, box){ 
+async function yuzResminiAl(video, box) {
 
-    let x = box.x, y = box.y, w=box.width, h=box.height;
+    let x = box.x, y = box.y, w = box.width, h = box.height;
     const vh = video.videoHeight;
     const vw = video.videoWidth;
-    
+
     if (box.width > box.height) {
-        if (box.width + y <= vh)
-        {
+        if (box.width + y <= vh) {
             h = box.width;
         }
     }
     else {
-        if (box.height + x <= vw) { 
+        if (box.height + x <= vw) {
             w = box.height;
         }
     }
@@ -381,44 +374,44 @@ async function yuzResminiAl(video, box){
     if (x - 20 >= 0 && x + w + 20 <= vw && y + h + 40 <= vh) {
         regionsToExtract = [new faceapi.Rect(x - 20, y, w + 20, h + 40)];
     }
-         
+
     const faceImages = await faceapi.extractFaces(video, regionsToExtract);
     return faceImages[0];
-}  
+}
 
 
 var MUTLULUK_ARR = [];
-function mutluluk_hort(deger) { 
-    if(MUTLULUK_ARR.length>=HAREKETLI_ORT) MUTLULUK_ARR.shift();
+function mutluluk_hort(deger) {
+    if (MUTLULUK_ARR.length >= HAREKETLI_ORT) MUTLULUK_ARR.shift();
     MUTLULUK_ARR.push(deger);
     const toplam = MUTLULUK_ARR.reduce((a, b) => a + b, 0);
     return Math.round(toplam / MUTLULUK_ARR.length);
 }
 
 var MASKE_ARR = [];
-function maske_hort(deger) { 
-    if(MASKE_ARR.length>=HAREKETLI_ORT) MASKE_ARR.shift();
+function maske_hort(deger) {
+    if (MASKE_ARR.length >= HAREKETLI_ORT) MASKE_ARR.shift();
     MASKE_ARR.push(deger);
     const toplam = MASKE_ARR.reduce((a, b) => a + b, 0);
     return Math.round(toplam / MASKE_ARR.length);
 }
 
 var YAS_ARR = [];
-function yas_hort(deger) { 
-    if(YAS_ARR.length>=HAREKETLI_ORT) YAS_ARR.shift();
+function yas_hort(deger) {
+    if (YAS_ARR.length >= HAREKETLI_ORT) YAS_ARR.shift();
     YAS_ARR.push(deger);
     const toplam = YAS_ARR.reduce((a, b) => a + b, 0);
     return Math.round(toplam / YAS_ARR.length);
 }
 
 var CINSIYET_ARR = [];
-function cinsiyet_hort(cinsiyet) { 
+function cinsiyet_hort(cinsiyet) {
     let deger = 0;
     if (cinsiyet == "male") deger = 1;
-    if(CINSIYET_ARR.length>=HAREKETLI_ORT) CINSIYET_ARR.shift();
+    if (CINSIYET_ARR.length >= HAREKETLI_ORT) CINSIYET_ARR.shift();
     CINSIYET_ARR.push(deger);
     const toplam = CINSIYET_ARR.reduce((a, b) => a + b, 0);
-    return toplam / CINSIYET_ARR.length >= 0.5 ? "Erkek": "Kadın";
+    return toplam / CINSIYET_ARR.length >= 0.5 ? "Erkek" : "Kadın";
 }
 
 
@@ -443,5 +436,5 @@ setInterval(function () {
     // zamanı yazdır
     const time_string = `${hours}:${minutes}:${seconds}`;
     saat_el.innerText = time_string;
-}, 1000); 
+}, 1000);
 
