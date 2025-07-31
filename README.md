@@ -1,5 +1,9 @@
-# YZ Uygulamaları ile Doğru Maske Takma Oranı ve Mutluluk İndeksi Hesaplama (HAPPY INDEX)
+# YZ Uygulamaları ile Doğru Maske Takma Oranı ve Mutluluk İndeksi Hesaplama (Happy Index)
 
+## Language Selection
+For the English version of this readme:  [English README](./README.en.md)
+
+## Proje Özeti
 Türkiye İstatistik Kurumu (TÜİK), her yıl “Yaşam Memnuniyet Araştırması” gerçekleştirmektedir. TÜİK’in 2019 raporuna göre, mutlu olduğunu beyan eden erkeklerin oranı %47,6 iken, kadınlarda bu oran %57,0 olarak hesaplanmıştır. Ayrıca, Sinop %77,6 oranla en mutlu il olarak raporda yer almıştır. TÜİK, memnuniyeti kamu hizmetlerinden, belediye hizmetlerinden gibi kategorilere ayırarak değerlendirmektedir. Birleşmiş Milletler ve Avrupa İstatistik Ofisi ise her yıl ülkeler düzeyinde anket yaparak Dünya Mutluluk İndeksi Raporu yayınlamaktadır.
 
 Yapay zeka (YZ) uygulamaları ile mutluluk indeksi hesaplama, dünyada henüz deneysel düzeyde olsa da, öznel verilerin YZ algoritmalarıyla analiz edilmesi, daha önce elde edilmesi zor olan veri analizlerinin yapılmasını sağlamaktadır. Örneğin, IBM kendi çalışanlarının mutluluk oranlarını ölçmek için, Dubai’de kamu binalarında vatandaşların kamu hizmetinden memnuniyet oranını hesaplamak için, mağazalar ise tüketicilerin memnuniyet oranını ölçmek için YZ kullanmaktadır.
